@@ -1,6 +1,15 @@
-// Protected route — requires authentication (enforced by middleware.ts).
+import { redirect } from 'next/navigation';
+import { checkAllowlist } from '@/lib/checkAllowlist';
+
+// Protected route — requires authentication (enforced by proxy.ts).
+// Allowlist is verified server-side before rendering content.
 // This placeholder will be replaced in a later epic with the movie search feature.
-export default function SuggestPage() {
+export default async function SuggestPage() {
+  const { allowed } = await checkAllowlist();
+  if (!allowed) {
+    redirect('/not-authorized');
+  }
+
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-4 py-16">
       <div className="w-full max-w-sm border-2 border-wire-border bg-wire-white p-8 rounded-sm">
