@@ -158,6 +158,25 @@ function MovieCard({ movie }: { movie: ScheduledMovie }) {
         </p>
         <p className="text-wire-text-muted text-sm">{runtime}</p>
         <p className="text-wire-text text-sm">{dateLabel}</p>
+        <a
+          href={`/api/ics/${movie.id}`}
+          download
+          className="
+            mt-1
+            inline-block
+            self-start
+            border border-wire-border
+            bg-wire-surface
+            rounded-sm
+            px-2 py-0.5
+            text-wire-text-muted
+            text-xs
+            hover:bg-wire-white
+            transition-colors
+          "
+        >
+          Add to Calendar
+        </a>
       </div>
     </div>
   );
