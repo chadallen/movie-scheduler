@@ -118,7 +118,14 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
         </div>
 
         {/* Suggest button */}
-        <SuggestButton tmdbId={movie.tmdb_id} />
+        <SuggestButton
+          movie={{
+            tmdbId: movie.tmdb_id,
+            title: movie.title,
+            posterPath: movie.poster_path,
+            runtimeMinutes: movie.runtime_minutes,
+          }}
+        />
       </div>
     </main>
   );
