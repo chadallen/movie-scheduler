@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "movie_scheduler",
+  "project_id": "c6a01492-2ac1-453a-a527-9423a5f31919"
+}
