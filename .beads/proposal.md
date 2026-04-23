@@ -56,7 +56,7 @@
 
 ### 2.2 Search page UI
 
-**Description:** Build the search page at `app/suggest/page.tsx`. Include a text input that calls `searchMovies` as the user types (debounce ~300ms). Display results as a scrollable list of movie cards showing poster thumbnail, title, and release year. Handle loading, empty, and error states.
+**Description:** Build the search page at `app/suggest/page.tsx`. Include a text input that calls `searchMovies` as the user types (debounce ~300ms). Display results as a scrollable list of movie cards showing title and release year. Handle loading, empty, and error states.
 **Design:** This is an authenticated route (covered by Clerk middleware). Keep the UI mobile-first — full-width cards, large tap targets. Use the brand color palette.
 **Acceptance:** Typing "Dune" shows Dune movies. Selecting a movie navigates to the detail/confirm view (stub is fine for now). Empty query shows no results. Network error shows an error message.
 **Depends on:** 2.1, 1.4
