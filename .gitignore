@@ -1,4 +1,12 @@
 
+# Local env files
+.env
+.env.local
+.env*.local
+
+scratch.md
+scratch.MD
+
 # Beads / Dolt files (added by bd init)
 .dolt/
 *.db

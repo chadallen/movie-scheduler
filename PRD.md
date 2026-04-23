@@ -1,52 +1,70 @@
-# [Your Product Name Here] — Product requirements
+# Movie Scheduler — Product Requirements
 
 ## Vision
 
-[One paragraph. What is this, who is it for and what problem does it solve? This is the north star: agents will reference it when making judgment calls.]
-
-> **Example:** An ATM is a self-service terminal that lets bank customers withdraw cash, check balances, and make deposits without a human teller. It exists so customers can access their money outside banking hours and at locations away from branches. Every design decision should optimize for speed and confidence — the customer wants to be done in under a minute and certain their money is safe.
+I host a lot of movie nights at my house. I want my friends to be able to suggest movies they would like me to show, and then have their suggested movie be automatically added to the next available calendar slot. That way there isn't a lot of back and forth about what to watch and when, and everyone has an easy way to get movies on the schedule.
 
 ## Goals
 
-[What are you trying to achieve with this project? Is it a personal project? Do you just need an MVP? Is it enterprise software (hahaha)? What platforms should it run on? Are there specific tools or services you want to use?]
+This is a personal app for my use only. It should be accessible via web browser and optimized for mobile. My friends should be able to access it, but it is invite-only: users authenticate via phone number + OTP, and only phone numbers on an admin-maintained allowlist can suggest movies. It's first come first serve — a suggested movie is immediately scheduled into the next available time slot. There is no approval workflow. A rate limit prevents any user from suggesting more than 1 movie per week (configurable constant). Users can add scheduled movies to their Google Calendar via ICS file. The upcoming schedule is publicly visible without login.
 
-> **Example:** MVP for a regional bank's branch network. Runs on embedded Linux hardware with a touchscreen. Must integrate with the bank's existing core banking API. Target is 500 deployed units. Built by a small internal team — simplicity and maintainability matter more than features.
+## Design Principles
 
-## Design principles
+Keep it simple. Admin features do not need to be in the app — the admin (just me) can manage data directly via the Supabase table editor. Don't build things from scratch that services already provide. Host on Vercel.
 
-[How decisions get made when there are tradeoffs. Agents use these to resolve ambiguity without asking.]
+The app should have a clean, modern look. No light/dark mode needed. Use bright, fun colors.
 
-> **Example:**
-> - Security over convenience — when in doubt, reject the transaction and explain why
-> - One action per screen — never ask the customer to decide two things at once
-> - Fail loudly — every error gets logged and surfaced to operations, never swallowed silently
+## Tech Stack
+
+- **Frontend/Backend:** Next.js (TypeScript) on Vercel
+- **Database & Admin UI:** Supabase (Postgres)
+- **Authentication:** Clerk (phone OTP)
+- **Movie Search API:** TMDB (The Movie Database)
+
+## User Personas
+
+- **User:** A friend who suggests movies. Authenticates via phone OTP. Can only proceed if their phone number is on the allowlist.
+- **Admin:** Me. Manages the allowlist of authorized phone numbers and the list of available time slots directly in Supabase.
 
 ## Features
 
-### [Feature name]
+### Authenticate
 
-[2-3 sentences on what this does and why it exists. Describe it in enough detail that an agent could plausibly implement it without asking a ton of clarifying questions (but they will anyway). Include edge cases and constraints if you can think of them. Use whatever format you like — user stories, stream of consciousness, rhyming couplets, whatever.]
+Before entering the search and suggest workflow, the user must enter their phone number and a numeric OTP sent to that phone via Clerk. If the phone number is not on the admin-maintained allowlist in Supabase, they cannot proceed.
 
-> **Example:**
->
-> ### Cash withdrawal
->
-> Customer inserts card, enters PIN, and selects an amount from preset options ($20, $40, $60, $100, $200) or types a custom amount. Machine dispenses cash if the account has sufficient funds and the customer hasn't exceeded the $500/day limit. If funds are insufficient or the daily limit is reached, decline with a clear message and offer to show the balance. Always dispense in $20 bills — reject custom amounts that aren't multiples of 20.
->
-> ### Balance inquiry
->
-> After PIN verification, show the current balance and available balance on screen. Available balance accounts for pending transactions. Offer to print a mini-statement (last 5 transactions). No cash dispensed in this flow.
->
-> ### Card retention
->
-> If a customer enters the wrong PIN 3 times in a row, retain the card inside the machine and display the bank's customer service number. Log the event. Card can only be retrieved by a bank employee with a master key.
+### Search Movie
 
-## Out of scope
+The user can search for movies by title using the TMDB API. Entering a title (e.g. "Dune") returns matching results so the user can select the specific movie they want to suggest.
 
-[What this product deliberately does not do. Prevents agents from gold-plating or solving adjacent problems.]
+### Suggest Movie
 
-> **Example:**
-> - No coin dispensing
-> - No loan applications or account opening
-> - No foreign currency exchange
-> - No person-to-person transfers
+Once the user has found their movie, they can suggest it with a single tap. The movie is immediately scheduled into the next available time slot. If the user has already suggested a movie in the past 7 days, the request is rejected (rate limit: 1 movie/week, stored as a configurable constant).
+
+### Upcoming Schedule
+
+A publicly visible page listing all scheduled movies in chronological order. No login required to view. Each entry includes the movie title, date/time, and an option to add it to the user's Google Calendar via ICS file download.
+
+### Add to Calendar
+
+Scheduled movies can be added to Google Calendar via an ICS file linked from the upcoming schedule page. No Twilio or SMS integration needed for this.
+
+### Maintain Available Slots (Admin)
+
+The admin maintains a table of available time slots in Supabase (date + time). When a movie is scheduled, the app claims the earliest available slot and marks it as taken. The admin adds new slots directly via the Supabase table editor.
+
+### Maintain Allowlist (Admin)
+
+The admin maintains a table of authorized phone numbers in Supabase. New users are added directly via the Supabase table editor.
+
+## Out of Scope
+
+- Allowing users to select a specific date for their movie
+- Allowing users to modify or cancel a previous suggestion
+- Any admin UI inside the app (all admin work done in Supabase directly)
+- SMS notifications or alerts
+- Light/dark mode
+
+## Future Versions
+
+- Allow users to opt in to text message alerts when new movies are added or new slots become available
+- Automatically adjust movie start time based on sunset time and runtime
