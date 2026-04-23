@@ -8,7 +8,6 @@ interface ScheduledMovie {
   title: string;
   poster_path: string | null;
   runtime_minutes: number | null;
-  suggested_by_phone: string | null;
   ics_uid: string | null;
   created_at: string;
   starts_at: string;
@@ -16,7 +15,7 @@ interface ScheduledMovie {
 
 function formatDateTime(isoString: string): string {
   const date = new Date(isoString);
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleString("en-US", {
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -29,14 +28,16 @@ function formatDateTime(isoString: string): string {
 export default async function Home() {
   const supabase = createServerSupabaseClient();
 
+  const now = new Date().toISOString();
+
   const { data: movies, error } = await supabase
     .from("scheduled_movies")
-    .select("*, available_slots!inner(starts_at)")
-    .gt("available_slots.starts_at", new Date().toISOString())
-    .order("available_slots.starts_at", { ascending: true });
+    .select(
+      "id, slot_id, tmdb_id, title, poster_path, runtime_minutes, ics_uid, created_at, available_slots!inner(starts_at)"
+    );
 
   // Flatten the join result so starts_at is at the top level
-  const scheduledMovies: ScheduledMovie[] = (movies ?? []).map(
+  const allMapped: ScheduledMovie[] = (movies ?? []).map(
     (row: Record<string, unknown>) => {
       const slot = row.available_slots as { starts_at: string } | null;
       return {
@@ -46,13 +47,17 @@ export default async function Home() {
         title: row.title as string,
         poster_path: row.poster_path as string | null,
         runtime_minutes: row.runtime_minutes as number | null,
-        suggested_by_phone: row.suggested_by_phone as string | null,
         ics_uid: row.ics_uid as string | null,
         created_at: row.created_at as string,
         starts_at: slot?.starts_at ?? "",
       };
     }
   );
+
+  // PostgREST does not filter on joined columns — apply filter and sort in JS
+  const scheduledMovies = allMapped
+    .filter((m) => m.starts_at > now)
+    .sort((a, b) => a.starts_at.localeCompare(b.starts_at));
 
   if (error) {
     console.error("Failed to load scheduled movies:", error.message);
