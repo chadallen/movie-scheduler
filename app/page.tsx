@@ -99,11 +99,12 @@ export default async function Home() {
           <Link
             href="/suggest"
             className="
-              inline-block
+              inline-flex items-center justify-center
               border-2 border-wire-border
               bg-wire-white
               rounded-sm
-              px-5 py-2
+              px-5
+              min-h-[44px]
               text-wire-text
               text-base
               font-bold
@@ -163,14 +164,15 @@ function MovieCard({ movie }: { movie: ScheduledMovie }) {
           download
           className="
             mt-1
-            inline-block
+            inline-flex items-center
             self-start
             border border-wire-border
             bg-wire-surface
             rounded-sm
-            px-2 py-0.5
+            px-3 py-1.5
             text-wire-text-muted
             text-xs
+            min-h-[36px]
             hover:bg-wire-white
             transition-colors
           "

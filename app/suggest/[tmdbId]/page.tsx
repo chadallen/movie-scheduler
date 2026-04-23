@@ -36,8 +36,9 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
           <Link
             href="/suggest"
             className="
-              inline-block
+              inline-flex items-center
               mb-6
+              min-h-[44px]
               text-wire-text
               underline
               text-base
@@ -69,7 +70,8 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
         <Link
           href="/suggest"
           className="
-            inline-block
+            inline-flex items-center
+            min-h-[44px]
             text-wire-text
             underline
             text-base
