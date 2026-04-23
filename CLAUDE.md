@@ -32,7 +32,7 @@ pnpm lint       # lint
 
 - Rate limit constant lives in `lib/config.ts` as `WEEKLY_MOVIE_LIMIT` (currently 1).
 - Admin features are out of scope for the app — direct Supabase access only.
-- No light/dark mode. Bright, fun color palette.
+- No light/dark mode. Balsamiq wireframe aesthetic: Comic Sans font, gray tones, off-white backgrounds, black borders. No bright colors.
 
 ## Task Tracking
 

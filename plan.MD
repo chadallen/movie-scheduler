@@ -1,7 +1,7 @@
 # Movie Scheduler — Plan
 
 **Task tracking:** Task tracking is via bd. Run `bd ready` for next tasks.
-**Active epic:** none yet — run `/create-tasks` to create your first epic
+**Active epic:** movie-scheduler-xc2 — Foundation (5 tasks) · movie-scheduler-5vb — Movie Search (3 tasks) · movie-scheduler-6lp — Scheduling (3 tasks) · movie-scheduler-e11 — Upcoming Schedule (3 tasks) · movie-scheduler-yes — Polish and Deploy (3 tasks)
 
 ---
 

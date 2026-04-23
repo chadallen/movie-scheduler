@@ -12,7 +12,7 @@ This is a personal app for my use only. It should be accessible via web browser 
 
 Keep it simple. Admin features do not need to be in the app — the admin (just me) can manage data directly via the Supabase table editor. Don't build things from scratch that services already provide. Host on Vercel.
 
-The app should have a clean, modern look. No light/dark mode needed. Use bright, fun colors.
+The app should look intentionally lo-fi — like a Balsamiq wireframe brought to life. Use Comic Sans (or a similar hand-drawn web font), gray tones, off-white backgrounds, and black/dark borders. No bright colors, no polish. The aesthetic should feel like a hand-sketched prototype. No light/dark mode needed.
 
 ## Tech Stack
 
