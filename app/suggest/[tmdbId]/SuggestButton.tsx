@@ -57,9 +57,9 @@ export default function SuggestButton({ movie }: SuggestButtonProps) {
           font-bold
         "
       >
-        Your movie has been suggested!
+        {movie.title} has been scheduled!
         <br />
-        <span className="font-normal">Scheduled for {formatted}.</span>
+        <span className="font-normal">Screening on {formatted}.</span>
       </div>
     );
   }
