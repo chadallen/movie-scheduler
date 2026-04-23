@@ -7,12 +7,11 @@
 
 ## Overall Plan
 
-1. **Foundation** — Next.js app scaffold, Supabase schema, Clerk auth wired up, env config
-2. **Auth flow** — Phone OTP login, allowlist enforcement, session management
-3. **Movie search** — TMDB integration, search UI, movie selection
-4. **Scheduling** — Available slots model, auto-schedule on suggestion, rate limiting
-5. **Upcoming schedule** — Public listing page, ICS file generation, add-to-calendar links
-6. **Polish** — Mobile layout, color palette, Vercel deployment
+1. **Foundation** (`xc2`) — Next.js scaffold, Supabase schema, Clerk phone auth, allowlist enforcement, env config
+2. **Movie Search** (`5vb`) — TMDB client, search UI, movie detail + suggest button
+3. **Scheduling** (`6lp`) — Rate limit, suggest server action, confirmation UI
+4. **Upcoming Schedule** (`e11`) — Schedule page, ICS generation, add-to-calendar UI
+5. **Polish and Deploy** (`yes`) — Mobile layout, design polish, Vercel deployment
 
 ---
 
@@ -20,7 +19,9 @@
 
 ### 2026-04-23
 
-Project initialized. CLAUDE.md and plan.MD created from PRD. Task tracking initialized and hooks installed. Ready to create first epic with `/create-tasks`.
+Setup and planning session. Finalized PRD (Next.js/TypeScript, Supabase, Clerk for phone OTP, TMDB for movie search, pnpm). Design direction set to deliberate Balsamiq wireframe aesthetic (Balsamiq Sans, gray tones, black borders — intentionally lo-fi). Created GitHub repo (`chadallen/movie-scheduler`, private). Initialized project workflow: CLAUDE.md, plan.MD, beads task tracking, Claude Code hooks. Created 5 epics and 17 tasks covering all PRD features with full dependency chains. All pushed to remote.
+
+**Next session:** Start with `movie-scheduler-xc2.1` (Scaffold Next.js app) — the only unblocked task. Run `/build-tasks movie-scheduler-xc2` to build the Foundation epic autonomously.
 
 ---
 
