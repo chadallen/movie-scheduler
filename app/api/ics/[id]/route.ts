@@ -49,6 +49,12 @@ export async function GET(
   const dtstart = toIcsDate(startsAt);
   const dtend = toIcsDate(endsAt);
 
+  const summary = row.title
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\n/g, "\\n");
+
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -58,7 +64,7 @@ export async function GET(
     `DTSTAMP:${dtstamp}`,
     `DTSTART:${dtstart}`,
     `DTEND:${dtend}`,
-    `SUMMARY:${row.title}`,
+    `SUMMARY:${summary}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ].join("\r\n");
