@@ -1,12 +1,9 @@
-/* Import Balsamiq Sans from Google Fonts — must come before @import "tailwindcss" */
-@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
-
 @import "tailwindcss";
 
 @theme {
   /* Wireframe typography */
-  --font-wireframe: "Balsamiq Sans", cursive;
-  --font-sans: "Balsamiq Sans", cursive;
+  --font-wireframe: "Comic Sans MS", "Comic Sans", cursive;
+  --font-sans: "Comic Sans MS", "Comic Sans", cursive;
 
   /* Wireframe color palette */
   --color-wire-bg: #f5f5f0;
@@ -25,7 +22,7 @@
 body {
   background-color: var(--color-wire-bg);
   color: var(--color-wire-text);
-  font-family: var(--font-wireframe);
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 
 /* Reset browser-default blue links — all anchors use wireframe text color */
