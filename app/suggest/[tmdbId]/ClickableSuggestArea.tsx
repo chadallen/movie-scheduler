@@ -150,7 +150,7 @@ export default function ClickableSuggestArea({
                   transition-colors
                 "
               >
-                Add to Calendar
+                Add to Your Calendar
               </a>
             </div>
           )}

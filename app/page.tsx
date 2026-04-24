@@ -173,7 +173,7 @@ function MovieCard({ movie }: { movie: ScheduledMovie }) {
             transition-colors
           "
         >
-          Add to Calendar
+          Add to Your Calendar
         </a>
       </div>
     </div>
