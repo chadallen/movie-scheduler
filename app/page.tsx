@@ -67,34 +67,6 @@ export default async function Home() {
   return (
     <main className="flex flex-1 flex-col items-center px-4 py-10">
       <div className="w-full max-w-md flex flex-col gap-6">
-        {/* Header */}
-        <div className="border-2 border-wire-border bg-wire-white rounded-sm px-5 py-5">
-          <h1 className="text-3xl font-bold text-wire-text mb-1">
-            Movie Night
-          </h1>
-          <p className="text-wire-text-muted text-base">
-            Upcoming scheduled movies
-          </p>
-        </div>
-
-        {/* Movie list or empty state */}
-        {scheduledMovies.length === 0 ? (
-          <div className="border-2 border-wire-border bg-wire-surface rounded-sm px-5 py-8 text-center">
-            <p className="text-wire-text text-lg font-bold mb-1">
-              Nothing scheduled yet.
-            </p>
-            <p className="text-wire-text-muted text-base">
-              Check back soon!
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-3">
-            {scheduledMovies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </div>
-        )}
-
         {/* Suggest link */}
         <div className="text-center">
           <Link
@@ -116,6 +88,29 @@ export default async function Home() {
             Suggest a movie →
           </Link>
         </div>
+
+        {/* Upcoming label */}
+        <p className="text-wire-text-muted text-base">
+          Upcoming scheduled movies
+        </p>
+
+        {/* Movie list or empty state */}
+        {scheduledMovies.length === 0 ? (
+          <div className="border-2 border-wire-border bg-wire-surface rounded-sm px-5 py-8 text-center">
+            <p className="text-wire-text text-lg font-bold mb-1">
+              Nothing scheduled yet.
+            </p>
+            <p className="text-wire-text-muted text-base">
+              Check back soon!
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {scheduledMovies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
