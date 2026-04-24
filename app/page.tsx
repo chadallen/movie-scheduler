@@ -16,6 +16,7 @@ interface ScheduledMovie {
 function formatDateTime(isoString: string): string {
   const date = new Date(isoString);
   return date.toLocaleString("en-US", {
+    timeZone: "America/Los_Angeles",
     weekday: "long",
     month: "long",
     day: "numeric",

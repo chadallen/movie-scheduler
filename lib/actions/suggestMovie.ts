@@ -23,11 +23,11 @@
  *   v_starts_at timestamptz;
  * BEGIN
  *   -- Lock and claim the earliest available slot atomically.
- *   SELECT id, starts_at
+ *   SELECT id, available_slots.starts_at
  *     INTO v_slot_id, v_starts_at
  *     FROM available_slots
  *    WHERE is_taken = false
- *    ORDER BY starts_at ASC
+ *    ORDER BY available_slots.starts_at ASC
  *    LIMIT 1
  *      FOR UPDATE SKIP LOCKED;
  *
