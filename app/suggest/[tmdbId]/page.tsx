@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { checkAllowlist } from "@/lib/checkAllowlist";
 import { getMovieDetails } from "@/lib/tmdb";
-import SuggestButton from "./SuggestButton";
+import ClickableSuggestArea from "./ClickableSuggestArea";
 
 export const metadata: Metadata = {
   title: "Suggest a Movie",
@@ -59,13 +59,13 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
     );
   }
 
-  const runtime =
+  const runtimeDisplay =
     movie.runtime_minutes != null
       ? `${movie.runtime_minutes} min`
       : "Runtime unknown";
 
   const posterUrl = movie.poster_path
-    ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+    ? `https://image.tmdb.org/t/p/w185${movie.poster_path}`
     : null;
 
   return (
@@ -85,53 +85,17 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
           ← Back to search
         </Link>
 
-        {/* Poster */}
-        <div className="flex justify-center">
-          {posterUrl ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={posterUrl}
-              alt={`${movie.title} poster`}
-              width={342}
-              height={513}
-              className="border-2 border-wire-border rounded-sm object-cover"
-              style={{ maxWidth: "100%", height: "auto" }}
-            />
-          ) : (
-            <div
-              className="
-                border-2 border-wire-border
-                bg-wire-surface
-                rounded-sm
-                flex items-center justify-center
-                text-wire-text-muted
-                text-lg
-              "
-              style={{ width: 342, height: 513, maxWidth: "100%" }}
-            >
-              No poster
-            </div>
-          )}
-        </div>
-
-        {/* Movie info */}
-        <div className="border-2 border-wire-border bg-wire-white rounded-sm px-4 py-4 flex flex-col gap-1">
-          <h1 className="text-2xl font-bold text-wire-text leading-tight">
-            {movie.title}
-          </h1>
-          <p className="text-wire-text-muted text-base">
-            {movie.year ? `${movie.year} · ` : ""}{runtime}
-          </p>
-        </div>
-
-        {/* Suggest button */}
-        <SuggestButton
+        {/* Title, poster, and suggest action — all wired together */}
+        <ClickableSuggestArea
           movie={{
             tmdbId: movie.tmdb_id,
             title: movie.title,
             posterPath: movie.poster_path,
             runtimeMinutes: movie.runtime_minutes,
           }}
+          posterUrl={posterUrl}
+          runtimeDisplay={runtimeDisplay}
+          year={movie.year}
         />
       </div>
     </main>
