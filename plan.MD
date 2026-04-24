@@ -1,7 +1,7 @@
 # Movie Scheduler — Plan
 
 **Task tracking:** Task tracking is via bd. Run `bd ready` for next tasks.
-**Active epic:** movie-scheduler-xc2 — Foundation (5 tasks) · movie-scheduler-5vb — Movie Search (3 tasks) · movie-scheduler-6lp — Scheduling (3 tasks) · movie-scheduler-e11 — Upcoming Schedule (3 tasks) · movie-scheduler-yes — Polish and Deploy (3 tasks) · movie-scheduler-9ic — Tester authentication bypass (3 tasks)
+**Active epic:** movie-scheduler-xc2 — Foundation (5 tasks) · movie-scheduler-5vb — Movie Search (3 tasks) · movie-scheduler-6lp — Scheduling (3 tasks) · movie-scheduler-e11 — Upcoming Schedule (3 tasks) · movie-scheduler-yes — Polish and Deploy (3 tasks) · movie-scheduler-9ic — Tester authentication bypass (3 tasks) · movie-scheduler-6rs — Environment and service setup (7 tasks)
 
 ---
 
@@ -19,15 +19,17 @@
 
 ### 2026-04-23
 
-Setup and planning session. Finalized PRD (Next.js/TypeScript, Supabase, Clerk for phone OTP, TMDB for movie search, pnpm). Design direction set to deliberate Balsamiq wireframe aesthetic (Balsamiq Sans, gray tones, black borders — intentionally lo-fi). Created GitHub repo (`chadallen/movie-scheduler`, private). Initialized project workflow: CLAUDE.md, plan.MD, beads task tracking, Claude Code hooks. Created 5 epics and 17 tasks covering all PRD features with full dependency chains. All pushed to remote.
+Massive build session. Completed Foundation (xc2), Movie Search (5vb), Scheduling (6lp), Upcoming Schedule (e11), and Polish (yes.1, yes.2) epics autonomously. Full app is functionally complete: phone OTP sign-in, TMDB movie search, atomic slot claiming, ICS calendar export, mobile layout, favicon, header with sign-out. Also created tester auth bypass epic (9ic): 9ic.1 (env config + allowlist bypass) and 9ic.2 (server actions with timing-safe comparison) closed. 9ic.3 (custom SignInForm) is in_progress — file created but uses wrong Clerk SDK methods (see task notes). Created 6rs epic with 7 manual setup tasks for user to complete (Clerk, Supabase, TMDB, env, seed data). yes.3 (Vercel deploy) remains open pending manual setup.
 
-**Next session:** Start with `movie-scheduler-xc2.1` (Scaffold Next.js app) — the only unblocked task. Run `/build-tasks movie-scheduler-xc2` to build the Foundation epic autonomously.
+**Next session:** Fix `movie-scheduler-9ic.3` — rewrite SignInForm.tsx using correct Clerk SDK API (prepareFirstFactor, attemptFirstFactor, setActive). Then complete `movie-scheduler-6rs` setup tasks (user action required).
 
 ---
 
 ## Known Issues / Blockers
 
-None yet.
+- `movie-scheduler-9ic.3` in_progress: SignInForm.tsx created but uses wrong Clerk JS SDK methods. Fix list in task notes. Key issues: use `prepareFirstFactor`/`attemptFirstFactor`/`setActive` instead of non-existent `signIn.phoneCode.*` and `signIn.finalize()` methods.
+- `movie-scheduler-yes.3` (Vercel deploy): requires user to set env vars in Vercel dashboard — cannot be automated.
+- `movie-scheduler-6rs.*` (all 7): manual setup tasks — Clerk project, Supabase project, schema, RPC, TMDB key, .env.local, seed data. User must complete these before the app works end-to-end.
 
 ---
 
