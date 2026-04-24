@@ -1,5 +1,10 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AutoSignOut } from './AutoSignOut';
+
+export const metadata: Metadata = {
+  title: "Not Authorized",
+};
 
 // Public route — renders even after sign-out completes.
 // The AutoSignOut component clears the Clerk session on mount.

@@ -4,8 +4,8 @@ import { ClerkProvider, Show, SignOutButton } from "@clerk/nextjs";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Movie Scheduler",
-  description: "Suggest and schedule movies for movie night",
+  title: { default: "Movie Night", template: "%s | Movie Night" },
+  description: "Suggest movies for movie night",
 };
 
 export default function RootLayout({

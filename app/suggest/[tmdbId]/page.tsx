@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { checkAllowlist } from "@/lib/checkAllowlist";
 import { getMovieDetails } from "@/lib/tmdb";
 import SuggestButton from "./SuggestButton";
+
+export const metadata: Metadata = {
+  title: "Suggest a Movie",
+};
 
 interface MovieDetailPageProps {
   params: Promise<{ tmdbId: string }>;

@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { checkAllowlist } from "@/lib/checkAllowlist";
 import SearchMovies from "./SearchMovies";
+
+export const metadata: Metadata = {
+  title: "Suggest a Movie",
+};
 
 // Protected route — requires authentication (enforced by proxy.ts).
 // Allowlist is verified server-side before rendering content.

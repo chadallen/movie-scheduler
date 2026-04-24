@@ -1,4 +1,9 @@
+import type { Metadata } from "next";
 import { SignIn } from "@clerk/nextjs";
+
+export const metadata: Metadata = {
+  title: "Sign In",
+};
 
 // Phone OTP-only mode is configured in the Clerk Dashboard:
 // Authentication > Email, Phone, Username > disable email and social,
