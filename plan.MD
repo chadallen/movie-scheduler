@@ -19,16 +19,15 @@
 
 ### 2026-04-23
 
-Massive build session. Completed Foundation (xc2), Movie Search (5vb), Scheduling (6lp), Upcoming Schedule (e11), and Polish (yes.1, yes.2) epics autonomously. Full app is functionally complete: phone OTP sign-in, TMDB movie search, atomic slot claiming, ICS calendar export, mobile layout, favicon, header with sign-out. Also created tester auth bypass epic (9ic): 9ic.1 (env config + allowlist bypass) and 9ic.2 (server actions with timing-safe comparison) closed. 9ic.3 (custom SignInForm) is in_progress — file created but uses wrong Clerk SDK methods (see task notes). Created 6rs epic with 7 manual setup tasks for user to complete (Clerk, Supabase, TMDB, env, seed data). yes.3 (Vercel deploy) remains open pending manual setup.
+Closed `movie-scheduler-9ic.3` (custom SignInForm with tester bypass). Discovery: the existing code was already correct — it uses Clerk v7's "Future" API (`signIn.phoneCode.sendCode`, `signIn.ticket`, `signIn.finalize`) which differs from the v3/v4 API the task notes assumed. TypeScript compiles clean. Full 9ic epic closed. All code work is complete — remaining tasks are manual service setup (6rs) and Vercel deploy (yes.3).
 
-**Next session:** Fix `movie-scheduler-9ic.3` — rewrite SignInForm.tsx using correct Clerk SDK API (prepareFirstFactor, attemptFirstFactor, setActive). Then complete `movie-scheduler-6rs` setup tasks (user action required).
+**Next session:** Complete `movie-scheduler-6rs` setup tasks (Clerk, Supabase, TMDB, .env.local, seed data) — user action required. Then `movie-scheduler-yes.3` (Vercel deploy).
 
 ---
 
 ## Known Issues / Blockers
 
-- `movie-scheduler-9ic.3` in_progress: SignInForm.tsx created but uses wrong Clerk JS SDK methods. Fix list in task notes. Key issues: use `prepareFirstFactor`/`attemptFirstFactor`/`setActive` instead of non-existent `signIn.phoneCode.*` and `signIn.finalize()` methods.
-- `movie-scheduler-yes.3` (Vercel deploy): requires user to set env vars in Vercel dashboard — cannot be automated.
+- `movie-scheduler-yes.3` (Vercel deploy): requires user to set env vars in Vercel dashboard — cannot be automated. Blocked until 6rs is done.
 - `movie-scheduler-6rs.*` (all 7): manual setup tasks — Clerk project, Supabase project, schema, RPC, TMDB key, .env.local, seed data. User must complete these before the app works end-to-end.
 
 ---
