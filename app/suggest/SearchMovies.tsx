@@ -101,37 +101,20 @@ export default function SearchMovies() {
                 <Link
                   href={`/suggest/${movie.tmdb_id}`}
                   className="
-                    flex items-center gap-3
+                    flex flex-col
                     border-2 border-wire-border
                     bg-wire-white
                     hover:bg-wire-surface
                     active:bg-wire-surface-2
                     rounded-sm
                     px-4
+                    py-3
                     min-h-[56px]
                     transition-colors
                     no-underline
+                    justify-center
                   "
                 >
-                  {movie.poster_path && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
-                      alt=""
-                      width={36}
-                      height={54}
-                      className="border border-wire-border rounded-sm flex-shrink-0 object-cover"
-                      style={{ width: 36, height: 54 }}
-                    />
-                  )}
-                  {!movie.poster_path && (
-                    <div
-                      className="border border-wire-border bg-wire-surface rounded-sm flex-shrink-0 flex items-center justify-center text-wire-text-muted text-xs"
-                      style={{ width: 36, height: 54 }}
-                    >
-                      ?
-                    </div>
-                  )}
                   <div className="flex flex-col min-w-0">
                     <span className="text-wire-text font-bold text-base leading-tight truncate">
                       {movie.title}
