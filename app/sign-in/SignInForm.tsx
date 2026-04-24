@@ -147,6 +147,8 @@ export default function SignInForm() {
               setPhase("phone");
               setOtp("");
               setError(null);
+              setIsSignUp(false);
+              setIsTester(false);
             }}
             className="text-wire-text-muted text-sm underline"
           >
