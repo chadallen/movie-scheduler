@@ -63,7 +63,7 @@ import { checkRateLimit } from "../rateLimit";
 import { createServerSupabaseClient } from "../supabase-server";
 
 export type SuggestResult =
-  | { success: true; scheduledAt: string }
+  | { success: true; scheduledAt: string; movieId: string }
   | { success: false; error: "rate_limited"; nextEligibleAt: string }
   | { success: false; error: "no_slots" }
   | { success: false; error: "not_authorized" }
@@ -136,12 +136,18 @@ export async function suggestMovie(movie: MovieInput): Promise<SuggestResult> {
     return { success: false, error: "no_slots" };
   }
 
-  // ── 5. Return confirmed datetime ──────────────────────────────────────────
+  // ── 5. Return confirmed datetime and movie ID ─────────────────────────────
   const row = Array.isArray(data) ? data[0] : data;
   const scheduledAt: string =
     typeof row.starts_at === "string"
       ? row.starts_at
       : new Date(row.starts_at).toISOString();
 
-  return { success: true, scheduledAt };
+  const { data: movieRow } = await supabase
+    .from("scheduled_movies")
+    .select("id")
+    .eq("slot_id", row.slot_id)
+    .single();
+
+  return { success: true, scheduledAt, movieId: movieRow?.id ?? "" };
 }

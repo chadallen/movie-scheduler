@@ -20,6 +20,7 @@ export default function ClickableSuggestArea({
 }: ClickableSuggestAreaProps) {
   const [state, setState] = useState<State>("idle");
   const [scheduledAt, setScheduledAt] = useState<string | null>(null);
+  const [movieId, setMovieId] = useState<string | null>(null);
   const [nextEligibleAt, setNextEligibleAt] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -30,6 +31,7 @@ export default function ClickableSuggestArea({
         const result = await suggestMovie(movie);
         if (result.success) {
           setScheduledAt(result.scheduledAt);
+          setMovieId(result.movieId);
           setState("success");
         } else if (result.error === "rate_limited") {
           setNextEligibleAt(result.nextEligibleAt);
@@ -118,14 +120,40 @@ export default function ClickableSuggestArea({
           <br />
           <span className="font-normal">
             Screening on{" "}
-            {new Date(scheduledAt).toLocaleDateString("en-US", {
+            {new Date(scheduledAt).toLocaleString("en-US", {
+              timeZone: "America/Los_Angeles",
               weekday: "long",
-              year: "numeric",
               month: "long",
               day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
             })}
             .
           </span>
+          {movieId && (
+            <div className="mt-3">
+              <a
+                href={`/api/ics/${movieId}`}
+                download
+                className="
+                  inline-flex items-center
+                  border border-wire-border
+                  bg-wire-white
+                  rounded-sm
+                  px-3 py-1.5
+                  text-wire-text-muted
+                  text-xs
+                  font-normal
+                  hover:bg-wire-surface
+                  transition-colors
+                "
+              >
+                Add to Calendar
+              </a>
+            </div>
+          )}
         </div>
       )}
 
