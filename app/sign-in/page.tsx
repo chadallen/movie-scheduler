@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SignIn } from "@clerk/nextjs";
+import SignInForm from "./SignInForm";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -14,7 +14,7 @@ export default function SignInPage() {
       <div className="w-full max-w-sm border-2 border-wire-border bg-wire-white p-8 rounded-sm">
         <h1 className="text-3xl font-bold mb-2 text-wire-text">Movie Night</h1>
         <p className="text-wire-text-muted mb-6">Sign in with your phone number.</p>
-        <SignIn routing="hash" />
+        <SignInForm />
       </div>
     </main>
   );
