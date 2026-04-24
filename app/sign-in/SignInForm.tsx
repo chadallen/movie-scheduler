@@ -72,7 +72,7 @@ export default function SignInForm() {
       if (finalizeResult.error) {
         throw new Error(finalizeResult.error.longMessage ?? finalizeResult.error.message ?? "Sign-in failed");
       }
-      router.push("/");
+      router.push("/suggest");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign-in failed");
     } finally {
