@@ -39,9 +39,15 @@ export default function SignInForm() {
       } catch (err: any) {
         // Account doesn't exist yet — create one and send sign-up OTP
         if (err?.errors?.[0]?.code === "form_identifier_not_found") {
-          await signUp.create({ phoneNumber: phone });
+          const createResult = await signUp.create({ phoneNumber: phone });
+          if (createResult.error) {
+            throw new Error(createResult.error.longMessage ?? createResult.error.message ?? "Failed to create account");
+          }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await (signUp as any).preparePhoneNumberVerification({ strategy: "phone_code" });
+          const prepResult = await (signUp as any).preparePhoneNumberVerification({ strategy: "phone_code" });
+          if (prepResult?.error) {
+            throw new Error(prepResult.error.longMessage ?? prepResult.error.message ?? "Failed to send code");
+          }
           setIsSignUp(true);
         } else {
           throw err;
