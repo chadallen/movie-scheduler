@@ -1,6 +1,7 @@
 import 'server-only';
 import { currentUser } from '@clerk/nextjs/server';
 import { createServerSupabaseClient } from './supabase-server';
+import { TESTER_PHONE } from './config';
 
 /**
  * Checks whether the currently authenticated Clerk user's phone number
@@ -24,6 +25,11 @@ export async function checkAllowlist(): Promise<{ allowed: boolean }> {
 
   if (!phone) {
     return { allowed: false };
+  }
+
+  // Tester bypass: skip DB lookup for the designated tester phone number.
+  if (phone === TESTER_PHONE && TESTER_PHONE !== "") {
+    return { allowed: true };
   }
 
   const supabase = createServerSupabaseClient();
