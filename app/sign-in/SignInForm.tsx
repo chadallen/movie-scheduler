@@ -1,5 +1,5 @@
 "use client";
-import { useSignIn } from "@clerk/nextjs";
+import { useClerk, useSignIn, useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { checkIsTesterPhone, createTesterSession } from "@/lib/actions/testerSignIn";
@@ -8,17 +8,20 @@ type Phase = "phone" | "otp";
 
 export default function SignInForm() {
   const { signIn } = useSignIn();
+  const { signUp } = useSignUp();
+  const { setActive } = useClerk();
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>("phone");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [isTester, setIsTester] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handlePhoneSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!signIn) return;
+    if (!signIn || !signUp) return;
     setError(null);
     setLoading(true);
     try {
@@ -28,14 +31,21 @@ export default function SignInForm() {
         setPhase("otp");
         return;
       }
-      // Normal Clerk flow: init sign-in attempt, then send phone code
-      const createResult = await signIn.create({ identifier: phone });
-      if (createResult.error) {
-        throw new Error(createResult.error.longMessage ?? createResult.error.message ?? "Failed to start sign-in");
-      }
-      const sendResult = await signIn.phoneCode.sendCode({ phoneNumber: phone });
-      if (sendResult.error) {
-        throw new Error(sendResult.error.longMessage ?? sendResult.error.message ?? "Failed to send code");
+
+      try {
+        await signIn.create({ identifier: phone });
+        await signIn.phoneCode.sendCode({ phoneNumber: phone });
+        setIsSignUp(false);
+      } catch (err: any) {
+        // Account doesn't exist yet — create one and send sign-up OTP
+        if (err?.errors?.[0]?.code === "form_identifier_not_found") {
+          await signUp.create({ phoneNumber: phone });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (signUp as any).preparePhoneNumberVerification({ strategy: "phone_code" });
+          setIsSignUp(true);
+        } else {
+          throw err;
+        }
       }
       setPhase("otp");
     } catch (err) {
@@ -47,11 +57,11 @@ export default function SignInForm() {
 
   async function handleOtpSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!signIn) return;
     setError(null);
     setLoading(true);
     try {
       if (isTester) {
+        if (!signIn) return;
         const result = await createTesterSession(phone, otp);
         if ("error" in result) {
           setError(result.error === "invalid credentials" ? "Invalid OTP" : "Sign-in failed");
@@ -61,16 +71,19 @@ export default function SignInForm() {
         if (ticketResult.error) {
           throw new Error(ticketResult.error.longMessage ?? ticketResult.error.message ?? "Ticket sign-in failed");
         }
-      } else {
-        const verifyResult = await signIn.phoneCode.verifyCode({ code: otp });
-        if (verifyResult.error) {
-          throw new Error(verifyResult.error.longMessage ?? verifyResult.error.message ?? "Invalid code");
+        await signIn.finalize();
+      } else if (isSignUp) {
+        if (!signUp || !setActive) return;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const result = await (signUp as any).attemptPhoneNumberVerification({ code: otp });
+        if (result.status !== "complete") {
+          throw new Error("Verification failed");
         }
-      }
-      // finalize sets the session as active
-      const finalizeResult = await signIn.finalize();
-      if (finalizeResult.error) {
-        throw new Error(finalizeResult.error.longMessage ?? finalizeResult.error.message ?? "Sign-in failed");
+        await setActive({ session: result.createdSessionId });
+      } else {
+        if (!signIn) return;
+        await signIn.phoneCode.verifyCode({ code: otp });
+        await signIn.finalize();
       }
       router.push("/suggest");
     } catch (err) {
