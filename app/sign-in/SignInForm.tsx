@@ -40,13 +40,23 @@ export default function SignInForm() {
         // Account doesn't exist yet — create one and send sign-up OTP
         if (err?.errors?.[0]?.code === "form_identifier_not_found") {
           const createResult = await signUp.create({ phoneNumber: phone });
+          console.log('[sign-up] create result:', createResult);
+          console.log('[sign-up] signUp after create:', signUp);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const su = signUp as any;
+          console.log('[sign-up] preparePhoneNumberVerification type:', typeof su.preparePhoneNumberVerification);
+          console.log('[sign-up] available methods:', Object.keys(su).filter(k => typeof su[k] === 'function'));
           if (createResult.error) {
             throw new Error(createResult.error.longMessage ?? createResult.error.message ?? "Failed to create account");
           }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const prepResult = await (signUp as any).preparePhoneNumberVerification({ strategy: "phone_code" });
-          if (prepResult?.error) {
-            throw new Error(prepResult.error.longMessage ?? prepResult.error.message ?? "Failed to send code");
+          if (typeof su.preparePhoneNumberVerification === 'function') {
+            const prepResult = await su.preparePhoneNumberVerification({ strategy: "phone_code" });
+            console.log('[sign-up] preparePhoneNumberVerification result:', prepResult);
+            if (prepResult?.error) {
+              throw new Error(prepResult.error.longMessage ?? prepResult.error.message ?? "Failed to send code");
+            }
+          } else {
+            console.log('[sign-up] preparePhoneNumberVerification not available, signUp.status:', su.status);
           }
           setIsSignUp(true);
         } else {
