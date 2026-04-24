@@ -21,7 +21,7 @@ export default function RootLayout({
           <header className="border-b-2 border-wire-border bg-wire-white flex items-center justify-between px-4 min-h-[44px]">
             <Link
               href="/"
-              className="font-bold text-wire-text text-lg leading-none py-2"
+              className="font-bold text-wire-text text-2xl leading-none py-2"
             >
               Movie Night
             </Link>
