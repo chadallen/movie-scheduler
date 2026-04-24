@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ClerkProvider, Show, SignOutButton } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,28 +25,6 @@ export default function RootLayout({
             >
               Movie Night
             </Link>
-            <Show when="signed-in">
-              <SignOutButton>
-                <button
-                  type="button"
-                  className="
-                    border-2 border-wire-border
-                    bg-wire-bg
-                    hover:bg-wire-surface
-                    active:bg-wire-surface-2
-                    text-wire-text
-                    text-sm font-bold
-                    rounded-sm
-                    px-3
-                    min-h-[36px]
-                    cursor-pointer
-                    transition-colors
-                  "
-                >
-                  Sign out
-                </button>
-              </SignOutButton>
-            </Show>
           </header>
           {children}
         </body>
