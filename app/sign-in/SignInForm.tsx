@@ -71,7 +71,7 @@ export default function SignInForm() {
   const inputClass =
     "w-full border-2 border-wire-border bg-wire-white px-3 py-2 min-h-[44px] rounded-sm text-wire-text focus:outline-none focus:border-wire-text";
   const buttonClass =
-    "w-full border-2 border-wire-border bg-wire-gray px-3 py-2 min-h-[44px] rounded-sm text-wire-text font-bold disabled:opacity-50";
+    "w-full border-2 border-wire-border bg-wire-surface-2 px-3 py-2 min-h-[44px] rounded-sm text-wire-text font-bold disabled:opacity-50";
 
   return (
     <form onSubmit={phase === "phone" ? handlePhoneSubmit : handleOtpSubmit} noValidate>
