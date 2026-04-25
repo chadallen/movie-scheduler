@@ -38,21 +38,21 @@ export default async function AdminPage() {
     const supabase = createServerSupabaseClient();
     const { data, error } = await supabase
       .from("scheduled_movies")
-      .select("id, title, suggested_by_phone, available_slots!inner(starts_at)")
-      .gt("available_slots.starts_at", new Date().toISOString())
-      .order("available_slots.starts_at", { ascending: true });
+      .select("id, title, suggested_by_phone, available_slots!inner(starts_at)");
 
     if (error) {
       console.error("[AdminPage] scheduled_movies query error:", error.message);
     } else if (data) {
-      scheduledMovies = data.map((row) => ({
-        id: row.id as string,
-        title: row.title as string,
-        suggested_by_phone: row.suggested_by_phone as string,
-        starts_at: (row.available_slots as unknown as { starts_at: string } | { starts_at: string }[]) instanceof Array
-          ? (row.available_slots as unknown as { starts_at: string }[])[0]?.starts_at ?? ""
-          : (row.available_slots as unknown as { starts_at: string }).starts_at,
-      }));
+      const now = new Date().toISOString();
+      scheduledMovies = data
+        .map((row) => ({
+          id: row.id as string,
+          title: row.title as string,
+          suggested_by_phone: row.suggested_by_phone as string,
+          starts_at: (row.available_slots as unknown as { starts_at: string }).starts_at,
+        }))
+        .filter((m) => m.starts_at > now)
+        .sort((a, b) => a.starts_at.localeCompare(b.starts_at));
     }
   } catch (err) {
     console.error("[AdminPage] scheduled_movies fetch error:", err);
