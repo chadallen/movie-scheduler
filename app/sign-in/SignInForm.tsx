@@ -3,6 +3,7 @@ import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { checkIsTesterPhone, createTesterSession } from "@/lib/actions/testerSignIn";
+import { getPostSignInPath } from "@/lib/actions/adminUsers";
 
 type Phase = "phone" | "otp";
 
@@ -60,7 +61,8 @@ export default function SignInForm() {
       }
       const { error: finalizeError } = await signIn.finalize();
       if (finalizeError) throw new Error(finalizeError.longMessage ?? finalizeError.message);
-      router.push("/suggest");
+      const path = await getPostSignInPath();
+      router.push(path);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign-in failed");
     } finally {

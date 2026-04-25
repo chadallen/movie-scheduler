@@ -36,6 +36,24 @@ async function isAdmin(): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// getPostSignInPath
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns the path to redirect to after sign-in.
+ * Admin users go to /admin; everyone else goes to /suggest.
+ */
+export async function getPostSignInPath(): Promise<string> {
+  const adminPhone = process.env.ADMIN_PHONE;
+  const user = await currentUser();
+  if (adminPhone && user) {
+    const phone = user.phoneNumbers?.[0]?.phoneNumber;
+    if (phone === adminPhone) return "/admin";
+  }
+  return "/suggest";
+}
+
+// ---------------------------------------------------------------------------
 // listUsers
 // ---------------------------------------------------------------------------
 
