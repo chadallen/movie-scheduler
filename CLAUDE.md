@@ -31,8 +31,9 @@ pnpm lint       # lint
 ## Conventions
 
 - Rate limit constant lives in `lib/config.ts` as `WEEKLY_MOVIE_LIMIT` (currently 200 for testing; lower for production).
-- Admin features are out of scope for the app — direct Supabase access only.
-- No light/dark mode. Cinema dark theme: DM Sans font, near-black backgrounds (#111111), warm white text (#ede9e0), dark borders (#333333), gold accent (#c9a84c). wire-* token names unchanged in component files.
+- Admin UI lives at `/admin` (phone-gated via `ADMIN_PHONE` env var). User management and schedule management are handled there; general Supabase access still used for slot seeding.
+- No light/dark mode. Cinema dark theme: DM Sans font, near-black backgrounds (#111111), warm white text (#ede9e0), dark borders (#333333), gold accent (#c9a84c), dark card surfaces (#242424). wire-* token names unchanged in component files.
+- Lint uses ESLint flat config (`eslint.config.mjs`) — `.eslintrc.json` was removed. `next lint` is gone in Next.js 16; run `pnpm lint` which invokes `eslint .` directly.
 - `.env.local` must include `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in` and `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-in` or Clerk redirects to its hosted Account Portal.
 - Seed `available_slots` using `make_timestamptz(year, month, day, 19, 0, 0, 'America/Los_Angeles')` — `AT TIME ZONE` on generate_series dates runs backwards (converts UTC→LA instead of LA→UTC).
 - Hidden `/sign-out` page exists for tester use — not linked in the UI.

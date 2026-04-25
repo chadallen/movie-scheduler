@@ -19,9 +19,9 @@
 
 ### 2026-04-25
 
-Thorough start-session (no end-session last time). Closed `movie-scheduler-999.1`: Clerk v7 uses `SignInFutureResource` (signals-based API) — all methods return `{ error: ClerkError | null }` instead of throwing. Fixed all 5 callsites (`create`, `sendCode`, `verifyCode`, `ticket`, `finalize`) to check error returns; this was likely the root cause of sign-in failures. Created `movie-scheduler-c3e` (replace ICS with Google Calendar URL link) and wrote ADR-0003 documenting that decision. Discussed UX improvements: dark cinema theme (replacing Comic Sans), back-to-search nav on detail page, success state navigation links, and gold accent polish pass — four tasks drafted but not yet created in bd (session ended mid-review).
+Created and built the full UX improvements epic (`h2f`): cinema dark theme (DM Sans, dark palette, ADR-0004), back-to-search nav link, success state nav links, gold accent on text links. Fixed two pre-existing bugs found during review: broken `pnpm lint` (migrated to ESLint flat config) and invisible sign-in button (`bg-wire-gray` → `bg-wire-surface-2`). Completed `c3e` (ICS → Google Calendar URL). Renamed app to "Theater With a View" everywhere. Added admin movie deletion tasks (`t7a`, `b6e`). Multiple deploys throughout — live at movies.fork.pizza.
 
-**Next session:** Run `/create-tasks` to confirm the four pending UX tasks (cinema dark theme, back-to-search link, success state nav, gold accent polish), then start with `movie-scheduler-999.2` (admin server actions) or the cinema theme task.
+**Next session:** Start with `movie-scheduler-999.2` (admin server actions for user management) which unblocks `999.3` (admin UI). Then `t7a` + `b6e` (delete scheduled movies). Or run `/build-tasks movie-scheduler-999 --auto`.
 
 ---
 
@@ -29,7 +29,7 @@ Thorough start-session (no end-session last time). Closed `movie-scheduler-999.1
 
 - `movie-scheduler-yes.3` (Vercel deploy): requires user to create Vercel project and set env vars in dashboard — cannot be automated. Ready to proceed (6rs complete).
 - `WEEKLY_MOVIE_LIMIT` is currently 200 in `lib/config.ts` — lower before production deploy.
-- Four UX tasks discussed but not yet filed: cinema dark theme, back-to-search nav, success state nav links, gold accent polish. Run `/create-tasks` next session to create them.
+- `movie-scheduler-999.2` (admin server actions) must be built before `999.3` (admin UI) and before `b6e` (delete movie UI).
 
 ---
 
