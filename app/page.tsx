@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { toPTDateString, todayPT } from "@/lib/time";
 
 interface ScheduledMovie {
   id: string;
@@ -30,8 +31,6 @@ function formatDateTime(isoString: string): string {
 export default async function Home() {
   const supabase = createServerSupabaseClient();
 
-  const now = new Date().toISOString();
-
   const { data: movies, error } = await supabase
     .from("scheduled_movies")
     .select(
@@ -55,9 +54,10 @@ export default async function Home() {
     }
   );
 
-  // PostgREST does not filter on joined columns — apply filter and sort in JS
+  // Show movies whose date in Pacific time is today or later.
+  const today = todayPT();
   const scheduledMovies = allMapped
-    .filter((m) => m.starts_at > now)
+    .filter((m) => m.starts_at && toPTDateString(new Date(m.starts_at)) >= today)
     .sort((a, b) => a.starts_at.localeCompare(b.starts_at));
 
   if (error) {

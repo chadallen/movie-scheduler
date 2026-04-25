@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs/server";
 import { listUsers } from "@/lib/actions/adminUsers";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { toPTDateString, todayPT } from "@/lib/time";
 import UserManagement from "./UserManagement";
 import ScheduledMovies, { type ScheduledMovie } from "./ScheduledMovies";
 
@@ -43,7 +44,7 @@ export default async function AdminPage() {
     if (error) {
       console.error("[AdminPage] scheduled_movies query error:", error.message);
     } else if (data) {
-      const now = new Date().toISOString();
+      const today = todayPT();
       scheduledMovies = data
         .map((row) => ({
           id: row.id as string,
@@ -51,7 +52,7 @@ export default async function AdminPage() {
           suggested_by_phone: row.suggested_by_phone as string,
           starts_at: (row.available_slots as unknown as { starts_at: string }).starts_at,
         }))
-        .filter((m) => m.starts_at > now)
+        .filter((m) => m.starts_at && toPTDateString(new Date(m.starts_at)) >= today)
         .sort((a, b) => a.starts_at.localeCompare(b.starts_at));
     }
   } catch (err) {
