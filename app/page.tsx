@@ -88,7 +88,7 @@ export default async function Home() {
         </div>
 
         {/* Upcoming label */}
-        <p className="text-wire-text-muted text-base font-bold">
+        <p className="text-wire-text-muted text-base font-bold border-t border-b border-wire-border py-3">
           Upcoming scheduled movies
         </p>
 
