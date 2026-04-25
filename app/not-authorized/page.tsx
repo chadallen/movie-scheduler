@@ -15,7 +15,7 @@ export default function NotAuthorizedPage() {
       <div className="w-full max-w-sm border-2 border-wire-border bg-wire-white p-8 rounded-sm">
         <h1 className="text-3xl font-bold mb-4 text-wire-text">Not on the List</h1>
         <p className="text-wire-text-muted mb-6">
-          Your phone number isn&apos;t on the guest list for movie night. If you
+          Your phone number isn&apos;t on the guest list for Theater With a View. If you
           think this is a mistake, ask the host to add you.
         </p>
         <div className="border-2 border-wire-border bg-wire-surface p-4 rounded-sm text-center">
@@ -23,7 +23,7 @@ export default function NotAuthorizedPage() {
             href="/"
             className="text-wire-text underline hover:no-underline"
           >
-            Back to Movie Night
+            Back to Theater With a View
           </Link>
         </div>
       </div>
