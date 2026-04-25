@@ -7,6 +7,7 @@ import {
   deleteUser,
   updateUserPhone,
 } from "@/lib/actions/adminUsers";
+import { normalizePhone } from "@/lib/phone";
 
 interface Props {
   initialUsers: AdminUser[];
@@ -35,7 +36,7 @@ export default function UserManagement({ initialUsers }: Props) {
     setCreateError(null);
     setCreateSuccess(null);
 
-    const phone = createPhone.trim();
+    const phone = normalizePhone(createPhone);
     if (!phone) return;
 
     startTransition(async () => {
@@ -90,7 +91,7 @@ export default function UserManagement({ initialUsers }: Props) {
   }
 
   function handleEditSave(user: AdminUser) {
-    const newPhone = editPhone.trim();
+    const newPhone = normalizePhone(editPhone);
     if (!newPhone || newPhone === user.phone) {
       cancelEdit();
       return;

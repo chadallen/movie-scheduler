@@ -3,6 +3,7 @@ import { useSignIn } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { checkIsTesterPhone, createTesterSession } from "@/lib/actions/testerSignIn";
+import { normalizePhone } from "@/lib/phone";
 
 type Phase = "phone" | "otp";
 
@@ -24,16 +25,18 @@ export default function SignInForm() {
     if (!signIn) return;
     setError(null);
     setLoading(true);
+    const normalized = normalizePhone(phone);
+    if (normalized !== phone) setPhone(normalized);
     try {
-      const tester = await checkIsTesterPhone(phone);
+      const tester = await checkIsTesterPhone(normalized);
       if (tester) {
         setIsTester(true);
         setPhase("otp");
         return;
       }
-      const { error: createError } = await signIn.create({ identifier: phone });
+      const { error: createError } = await signIn.create({ identifier: normalized });
       if (createError) throw new Error(createError.longMessage ?? createError.message);
-      const { error: sendError } = await signIn.phoneCode.sendCode({ phoneNumber: phone });
+      const { error: sendError } = await signIn.phoneCode.sendCode({ phoneNumber: normalized });
       if (sendError) throw new Error(sendError.longMessage ?? sendError.message);
       setPhase("otp");
     } catch (err) {
