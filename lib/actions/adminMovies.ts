@@ -41,7 +41,7 @@ async function isAdmin(): Promise<void> {
  *
  * Admin-only.
  */
-export async function deleteScheduledMovie(id: string): Promise<void> {
+export async function deleteScheduledMovie(id: string): Promise<{ error: string } | null> {
   await isAdmin();
 
   const supabase = createServerSupabaseClient();
@@ -55,7 +55,7 @@ export async function deleteScheduledMovie(id: string): Promise<void> {
 
   if (fetchError || !row) {
     console.error("[deleteScheduledMovie] fetch error:", fetchError?.message);
-    throw new Error(`Scheduled movie not found: ${id}`);
+    return { error: `Scheduled movie not found: ${id}` };
   }
 
   const slotId: string = row.slot_id;
@@ -68,7 +68,7 @@ export async function deleteScheduledMovie(id: string): Promise<void> {
 
   if (deleteError) {
     console.error("[deleteScheduledMovie] delete error:", deleteError.message);
-    throw new Error("Failed to delete scheduled movie");
+    return { error: "Failed to delete scheduled movie" };
   }
 
   // 3. Restore the slot as available.
@@ -79,6 +79,8 @@ export async function deleteScheduledMovie(id: string): Promise<void> {
 
   if (updateError) {
     console.error("[deleteScheduledMovie] slot restore error:", updateError.message);
-    throw new Error("Scheduled movie deleted but failed to restore slot availability");
+    return { error: "Movie deleted but failed to restore slot — fix in Supabase manually" };
   }
+
+  return null;
 }

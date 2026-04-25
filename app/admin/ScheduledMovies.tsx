@@ -25,14 +25,13 @@ export default function ScheduledMovies({ initialMovies }: Props) {
     setDeleteError(null);
 
     startTransition(async () => {
-      try {
-        await deleteScheduledMovie(movie.id);
+      const result = await deleteScheduledMovie(movie.id);
+      if (result && "error" in result) {
+        setDeleteError(result.error);
+      } else {
         setMovies((prev) => prev.filter((m) => m.id !== movie.id));
-      } catch (err) {
-        setDeleteError(err instanceof Error ? err.message : "Failed to delete movie");
-      } finally {
-        setDeletingId(null);
       }
+      setDeletingId(null);
     });
   }
 

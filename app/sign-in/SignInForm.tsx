@@ -1,15 +1,17 @@
 "use client";
 import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { checkIsTesterPhone, createTesterSession } from "@/lib/actions/testerSignIn";
-import { getPostSignInPath } from "@/lib/actions/adminUsers";
 
 type Phase = "phone" | "otp";
 
 export default function SignInForm() {
   const { signIn } = useSignIn();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect_url");
+  const destination = redirectUrl?.startsWith("/") ? redirectUrl : "/suggest";
   const [phase, setPhase] = useState<Phase>("phone");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
@@ -61,8 +63,7 @@ export default function SignInForm() {
       }
       const { error: finalizeError } = await signIn.finalize();
       if (finalizeError) throw new Error(finalizeError.longMessage ?? finalizeError.message);
-      const path = await getPostSignInPath();
-      router.push(path);
+      router.push(destination);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign-in failed");
     } finally {

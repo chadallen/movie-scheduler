@@ -36,24 +36,6 @@ async function isAdmin(): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
-// getPostSignInPath
-// ---------------------------------------------------------------------------
-
-/**
- * Returns the path to redirect to after sign-in.
- * Admin users go to /admin; everyone else goes to /suggest.
- */
-export async function getPostSignInPath(): Promise<string> {
-  const adminPhone = process.env.ADMIN_PHONE;
-  const user = await currentUser();
-  if (adminPhone && user) {
-    const phone = user.phoneNumbers?.[0]?.phoneNumber;
-    if (phone === adminPhone) return "/admin";
-  }
-  return "/suggest";
-}
-
-// ---------------------------------------------------------------------------
 // listUsers
 // ---------------------------------------------------------------------------
 
@@ -109,12 +91,12 @@ export async function listUsers(): Promise<AdminUser[]> {
  * user. Phone must be in E.164 format (e.g. +15555551234).
  * Admin-only.
  */
-export async function createUser(phone: string): Promise<AdminUser> {
+export async function createUser(phone: string): Promise<AdminUser | { error: string }> {
   await isAdmin();
 
   // Validate E.164 format.
   if (!/^\+[1-9]\d{6,14}$/.test(phone)) {
-    throw new Error("Phone must be in E.164 format (e.g. +15555551234)");
+    return { error: "Phone must be in E.164 format (e.g. +15555551234)" };
   }
 
   const supabase = createServerSupabaseClient();
@@ -128,7 +110,7 @@ export async function createUser(phone: string): Promise<AdminUser> {
 
   if (insertError) {
     console.error("[createUser] Supabase insert error:", insertError.message);
-    throw new Error("Failed to add user to allowlist");
+    return { error: "Failed to add user to allowlist" };
   }
 
   // Create Clerk user.
@@ -141,7 +123,7 @@ export async function createUser(phone: string): Promise<AdminUser> {
     // Roll back the Supabase insert to keep systems in sync.
     await supabase.from("allowlist").delete().eq("id", row.id);
     console.error("[createUser] Clerk createUser error:", err);
-    throw new Error("Failed to create Clerk user; allowlist insert rolled back");
+    return { error: "Failed to create Clerk user; allowlist insert rolled back" };
   }
 
   return {
@@ -160,7 +142,7 @@ export async function createUser(phone: string): Promise<AdminUser> {
  * Removes a user from both the Supabase allowlist and Clerk.
  * Admin-only.
  */
-export async function deleteUser(supabaseId: string, clerkId: string): Promise<void> {
+export async function deleteUser(supabaseId: string, clerkId: string): Promise<{ error: string } | null> {
   await isAdmin();
 
   const supabase = createServerSupabaseClient();
@@ -173,7 +155,7 @@ export async function deleteUser(supabaseId: string, clerkId: string): Promise<v
 
   if (deleteError) {
     console.error("[deleteUser] Supabase delete error:", deleteError.message);
-    throw new Error("Failed to remove user from allowlist");
+    return { error: "Failed to remove user from allowlist" };
   }
 
   // Delete from Clerk.
@@ -182,11 +164,10 @@ export async function deleteUser(supabaseId: string, clerkId: string): Promise<v
     await client.users.deleteUser(clerkId);
   } catch (err) {
     console.error("[deleteUser] Clerk deleteUser error:", err);
-    // Supabase row is already gone; log and surface the error so the caller
-    // can investigate, but don't try to re-insert (partial state is visible
-    // in Clerk and can be cleaned up manually).
-    throw new Error("User removed from allowlist but Clerk deletion failed");
+    return { error: "User removed from allowlist but Clerk deletion failed — remove from Clerk manually" };
   }
+
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -202,12 +183,12 @@ export async function updateUserPhone(
   supabaseId: string,
   clerkId: string,
   newPhone: string
-): Promise<AdminUser> {
+): Promise<AdminUser | { error: string }> {
   await isAdmin();
 
   // Validate E.164 format.
   if (!/^\+[1-9]\d{6,14}$/.test(newPhone)) {
-    throw new Error("Phone must be in E.164 format (e.g. +15555551234)");
+    return { error: "Phone must be in E.164 format (e.g. +15555551234)" };
   }
 
   const supabase = createServerSupabaseClient();
@@ -221,7 +202,7 @@ export async function updateUserPhone(
 
   if (fetchError || !existing) {
     console.error("[updateUserPhone] Supabase fetch error:", fetchError?.message);
-    throw new Error("User not found in allowlist");
+    return { error: "User not found in allowlist" };
   }
 
   // Update Supabase.
@@ -234,7 +215,7 @@ export async function updateUserPhone(
 
   if (updateError || !updated) {
     console.error("[updateUserPhone] Supabase update error:", updateError?.message);
-    throw new Error("Failed to update phone in allowlist");
+    return { error: "Failed to update phone in allowlist" };
   }
 
   // Update Clerk: add the new phone number then remove the old one.
@@ -262,7 +243,7 @@ export async function updateUserPhone(
       // Edge case: old phone not found on Clerk user — delete the newly added
       // phone resource we just created to avoid orphans, then surface an error.
       await client.phoneNumbers.deletePhoneNumber(newPhoneResource.id);
-      throw new Error("Old phone number not found on Clerk user");
+      return { error: "Old phone number not found on Clerk user" };
     }
   } catch (err) {
     // Roll back the Supabase update.
@@ -271,7 +252,7 @@ export async function updateUserPhone(
       .update({ phone: existing.phone })
       .eq("id", supabaseId);
     console.error("[updateUserPhone] Clerk update error:", err);
-    throw new Error("Failed to update phone in Clerk; allowlist update rolled back");
+    return { error: "Failed to update phone in Clerk; allowlist update rolled back" };
   }
 
   return {

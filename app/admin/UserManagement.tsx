@@ -39,13 +39,13 @@ export default function UserManagement({ initialUsers }: Props) {
     if (!phone) return;
 
     startTransition(async () => {
-      try {
-        const newUser = await createUser(phone);
-        setUsers((prev) => [...prev, newUser]);
+      const result = await createUser(phone);
+      if ("error" in result) {
+        setCreateError(result.error);
+      } else {
+        setUsers((prev) => [...prev, result]);
         setCreatePhone("");
-        setCreateSuccess(`Added ${newUser.phone}`);
-      } catch (err) {
-        setCreateError(err instanceof Error ? err.message : "Failed to create user");
+        setCreateSuccess(`Added ${result.phone}`);
       }
     });
   }
@@ -63,17 +63,14 @@ export default function UserManagement({ initialUsers }: Props) {
     setDeletingId(user.supabaseId);
 
     startTransition(async () => {
-      try {
-        await deleteUser(user.supabaseId, user.clerkId!);
+      const result = await deleteUser(user.supabaseId, user.clerkId!);
+      if (result && "error" in result) {
+        setEditError(result.error);
+      } else {
         setUsers((prev) => prev.filter((u) => u.supabaseId !== user.supabaseId));
-        if (editingId === user.supabaseId) {
-          setEditingId(null);
-        }
-      } catch (err) {
-        setEditError(err instanceof Error ? err.message : "Failed to delete user");
-      } finally {
-        setDeletingId(null);
+        if (editingId === user.supabaseId) setEditingId(null);
       }
+      setDeletingId(null);
     });
   }
 
@@ -107,15 +104,15 @@ export default function UserManagement({ initialUsers }: Props) {
     setEditError(null);
 
     startTransition(async () => {
-      try {
-        const updated = await updateUserPhone(user.supabaseId, user.clerkId!, newPhone);
+      const result = await updateUserPhone(user.supabaseId, user.clerkId!, newPhone);
+      if ("error" in result) {
+        setEditError(result.error);
+      } else {
         setUsers((prev) =>
-          prev.map((u) => (u.supabaseId === updated.supabaseId ? updated : u))
+          prev.map((u) => (u.supabaseId === result.supabaseId ? result : u))
         );
         setEditingId(null);
         setEditPhone("");
-      } catch (err) {
-        setEditError(err instanceof Error ? err.message : "Failed to update phone");
       }
     });
   }
