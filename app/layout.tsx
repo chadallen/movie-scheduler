@@ -11,7 +11,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Movie Night", template: "%s | Movie Night" },
+  title: { default: "Theater With a View", template: "%s | Theater With a View" },
   description: "Suggest movies for movie night",
 };
 
@@ -30,7 +30,7 @@ export default function RootLayout({
               href="/"
               className="font-bold text-wire-text text-2xl leading-none py-2"
             >
-              Movie Night
+              Theater With a View
             </Link>
           </header>
           {children}
