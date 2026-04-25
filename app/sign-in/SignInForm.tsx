@@ -28,8 +28,10 @@ export default function SignInForm() {
         setPhase("otp");
         return;
       }
-      await signIn.create({ identifier: phone });
-      await signIn.phoneCode.sendCode({ phoneNumber: phone });
+      const { error: createError } = await signIn.create({ identifier: phone });
+      if (createError) throw new Error(createError.longMessage ?? createError.message);
+      const { error: sendError } = await signIn.phoneCode.sendCode({ phoneNumber: phone });
+      if (sendError) throw new Error(sendError.longMessage ?? sendError.message);
       setPhase("otp");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -45,19 +47,19 @@ export default function SignInForm() {
     setLoading(true);
     try {
       if (isTester) {
-        const result = await createTesterSession(phone, otp);
-        if ("error" in result) {
-          setError(result.error === "invalid credentials" ? "Invalid OTP" : "Sign-in failed");
+        const testerResult = await createTesterSession(phone, otp);
+        if ("error" in testerResult) {
+          setError(testerResult.error === "invalid credentials" ? "Invalid OTP" : "Sign-in failed");
           return;
         }
-        const ticketResult = await signIn.ticket({ ticket: result.token });
-        if (ticketResult.error) {
-          throw new Error(ticketResult.error.longMessage ?? ticketResult.error.message ?? "Ticket sign-in failed");
-        }
+        const { error: ticketError } = await signIn.ticket({ ticket: testerResult.token });
+        if (ticketError) throw new Error(ticketError.longMessage ?? ticketError.message);
       } else {
-        await signIn.phoneCode.verifyCode({ code: otp });
+        const { error: verifyError } = await signIn.phoneCode.verifyCode({ code: otp });
+        if (verifyError) throw new Error(verifyError.longMessage ?? verifyError.message);
       }
-      await signIn.finalize();
+      const { error: finalizeError } = await signIn.finalize();
+      if (finalizeError) throw new Error(finalizeError.longMessage ?? finalizeError.message);
       router.push("/suggest");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign-in failed");
