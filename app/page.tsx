@@ -8,7 +8,6 @@ interface ScheduledMovie {
   title: string;
   poster_path: string | null;
   runtime_minutes: number | null;
-  ics_uid: string | null;
   created_at: string;
   starts_at: string;
 }
@@ -34,7 +33,7 @@ export default async function Home() {
   const { data: movies, error } = await supabase
     .from("scheduled_movies")
     .select(
-      "id, slot_id, tmdb_id, title, poster_path, runtime_minutes, ics_uid, created_at, available_slots!inner(starts_at)"
+      "id, slot_id, tmdb_id, title, poster_path, runtime_minutes, created_at, available_slots!inner(starts_at)"
     );
 
   // Flatten the join result so starts_at is at the top level
@@ -48,7 +47,6 @@ export default async function Home() {
         title: row.title as string,
         poster_path: row.poster_path as string | null,
         runtime_minutes: row.runtime_minutes as number | null,
-        ics_uid: row.ics_uid as string | null,
         created_at: row.created_at as string,
         starts_at: slot?.starts_at ?? "",
       };
@@ -155,26 +153,40 @@ function MovieCard({ movie }: { movie: ScheduledMovie }) {
         </p>
         <p className="text-wire-text-muted text-sm">{runtime}</p>
         <p className="text-wire-text text-sm">{dateLabel}</p>
-        <a
-          href={`/api/ics/${movie.id}`}
-          download
-          className="
-            mt-1
-            inline-flex items-center
-            self-start
-            border border-wire-border
-            bg-wire-surface
-            rounded-sm
-            px-3 py-1.5
-            text-wire-text-muted
-            text-xs
-            min-h-[36px]
-            hover:bg-wire-white
-            transition-colors
-          "
-        >
-          Add to Your Calendar
-        </a>
+        {movie.starts_at && (() => {
+          const startMs = new Date(movie.starts_at).getTime();
+          const runtimeMs = (movie.runtime_minutes ?? 120) * 60 * 1000;
+          const endMs = startMs + runtimeMs;
+          const toGcalDate = (ms: number) =>
+            new Date(ms).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+          const gcalUrl =
+            `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+            `&text=${encodeURIComponent(movie.title)}` +
+            `&dates=${toGcalDate(startMs)}/${toGcalDate(endMs)}`;
+          return (
+            <a
+              href={gcalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                mt-1
+                inline-flex items-center
+                self-start
+                border border-wire-border
+                bg-wire-surface
+                rounded-sm
+                px-3 py-1.5
+                text-wire-text-muted
+                text-xs
+                min-h-[36px]
+                hover:bg-wire-white
+                transition-colors
+              "
+            >
+              Add to Your Calendar
+            </a>
+          );
+        })()}
       </div>
     </div>
   );

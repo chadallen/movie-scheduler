@@ -133,28 +133,40 @@ export default function ClickableSuggestArea({
             })}
             .
           </span>
-          {movieId && (
-            <div className="mt-3">
-              <a
-                href={`/api/ics/${movieId}`}
-                download
-                className="
-                  inline-flex items-center
-                  border border-wire-border
-                  bg-wire-white
-                  rounded-sm
-                  px-3 py-1.5
-                  text-wire-text-muted
-                  text-xs
-                  font-normal
-                  hover:bg-wire-surface
-                  transition-colors
-                "
-              >
-                Add to Your Calendar
-              </a>
-            </div>
-          )}
+          {movieId && scheduledAt && (() => {
+            const startMs = new Date(scheduledAt).getTime();
+            const runtimeMs = (movie.runtimeMinutes ?? 120) * 60 * 1000;
+            const endMs = startMs + runtimeMs;
+            const toGcalDate = (ms: number) =>
+              new Date(ms).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+            const gcalUrl =
+              `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+              `&text=${encodeURIComponent(movie.title)}` +
+              `&dates=${toGcalDate(startMs)}/${toGcalDate(endMs)}`;
+            return (
+              <div className="mt-3">
+                <a
+                  href={gcalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    inline-flex items-center
+                    border border-wire-border
+                    bg-wire-white
+                    rounded-sm
+                    px-3 py-1.5
+                    text-wire-text-muted
+                    text-xs
+                    font-normal
+                    hover:bg-wire-surface
+                    transition-colors
+                  "
+                >
+                  Add to Your Calendar
+                </a>
+              </div>
+            );
+          })()}
           <div className="mt-3 flex flex-col gap-2">
             <Link
               href="/suggest"
