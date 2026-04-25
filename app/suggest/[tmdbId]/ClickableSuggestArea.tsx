@@ -158,13 +158,13 @@ export default function ClickableSuggestArea({
           <div className="mt-3 flex flex-col gap-2">
             <Link
               href="/suggest"
-              className="text-sm text-wire-text-muted font-normal"
+              className="text-sm text-wire-accent font-normal hover:opacity-80"
             >
               ← Suggest another movie
             </Link>
             <Link
               href="/"
-              className="text-sm text-wire-text-muted font-normal"
+              className="text-sm text-wire-accent font-normal hover:opacity-80"
             >
               See the schedule →
             </Link>
