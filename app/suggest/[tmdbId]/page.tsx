@@ -44,9 +44,8 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
               inline-flex items-center
               mb-6
               min-h-[44px]
-              text-wire-text
-              underline
-              text-base
+              text-wire-text-muted
+              text-sm
             "
           >
             ← Back to search
@@ -77,9 +76,8 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
           className="
             inline-flex items-center
             min-h-[44px]
-            text-wire-text
-            underline
-            text-base
+            text-wire-text-muted
+            text-sm
           "
         >
           ← Back to search
