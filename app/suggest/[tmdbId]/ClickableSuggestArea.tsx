@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { suggestMovie, type MovieInput } from "@/lib/actions/suggestMovie";
 
 interface ClickableSuggestAreaProps {
@@ -154,6 +155,20 @@ export default function ClickableSuggestArea({
               </a>
             </div>
           )}
+          <div className="mt-3 flex flex-col gap-2">
+            <Link
+              href="/suggest"
+              className="text-sm text-wire-text-muted font-normal"
+            >
+              ← Suggest another movie
+            </Link>
+            <Link
+              href="/"
+              className="text-sm text-wire-text-muted font-normal"
+            >
+              See the schedule →
+            </Link>
+          </div>
         </div>
       )}
 
