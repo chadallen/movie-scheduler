@@ -123,7 +123,12 @@ export async function createUser(phone: string): Promise<AdminUser | { error: st
     // Roll back the Supabase insert to keep systems in sync.
     await supabase.from("allowlist").delete().eq("id", row.id);
     console.error("[createUser] Clerk createUser error:", err);
-    return { error: "Failed to create Clerk user; allowlist insert rolled back" };
+    const clerkMessage =
+      err instanceof Error ? err.message :
+      (err as { errors?: { longMessage?: string; message?: string }[] })?.errors?.[0]?.longMessage ??
+      (err as { errors?: { longMessage?: string; message?: string }[] })?.errors?.[0]?.message ??
+      "Unknown Clerk error";
+    return { error: `Clerk error: ${clerkMessage}` };
   }
 
   return {
