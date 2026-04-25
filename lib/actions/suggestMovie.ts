@@ -22,11 +22,14 @@
  *   v_slot_id   uuid;
  *   v_starts_at timestamptz;
  * BEGIN
- *   -- Lock and claim the earliest available slot atomically.
+ *   -- Lock and claim the earliest available future slot atomically.
+ *   -- Only consider slots whose date in Pacific time is today or later.
  *   SELECT id, available_slots.starts_at
  *     INTO v_slot_id, v_starts_at
  *     FROM available_slots
  *    WHERE is_taken = false
+ *      AND starts_at >= date_trunc('day', CURRENT_TIMESTAMP AT TIME ZONE 'America/Los_Angeles')
+ *                                   AT TIME ZONE 'America/Los_Angeles'
  *    ORDER BY available_slots.starts_at ASC
  *    LIMIT 1
  *      FOR UPDATE SKIP LOCKED;
