@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  /* Wireframe typography */
-  --font-wireframe: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Chalkboard", cursive;
-  --font-sans: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Chalkboard", cursive;
+  /* Typography */
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
 
-  /* Wireframe color palette */
-  --color-wire-bg: #f5f5f0;
-  --color-wire-surface: #ebebeb;
-  --color-wire-surface-2: #e0e0e0;
-  --color-wire-border: #1a1a1a;
-  --color-wire-text: #1a1a1a;
-  --color-wire-text-muted: #555555;
-  --color-wire-white: #ffffff;
+  /* Cinema dark color palette */
+  --color-wire-bg: #111111;
+  --color-wire-surface: #1c1c1c;
+  --color-wire-surface-2: #252525;
+  --color-wire-border: #333333;
+  --color-wire-text: #ede9e0;
+  --color-wire-text-muted: #7a7570;
+  --color-wire-white: #f0ece4;
+  --color-wire-accent: #c9a84c;
 
   /* Aliases for Tailwind utility use */
   --color-background: var(--color-wire-bg);
@@ -22,7 +22,6 @@
 body {
   background-color: var(--color-wire-bg);
   color: var(--color-wire-text);
-  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Chalkboard", cursive;
 }
 
 /* Reset browser-default blue links — all anchors use wireframe text color */

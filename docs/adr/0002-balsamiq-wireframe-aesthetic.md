@@ -1,7 +1,7 @@
 # ADR-0002: Balsamiq Wireframe Visual Aesthetic
 
 **Date:** 2026-04-23
-**Status:** Accepted
+**Status:** Superseded by ADR-0004
 
 ## Context
 

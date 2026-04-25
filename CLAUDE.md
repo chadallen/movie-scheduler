@@ -32,7 +32,7 @@ pnpm lint       # lint
 
 - Rate limit constant lives in `lib/config.ts` as `WEEKLY_MOVIE_LIMIT` (currently 200 for testing; lower for production).
 - Admin features are out of scope for the app — direct Supabase access only.
-- No light/dark mode. Balsamiq wireframe aesthetic: Comic Sans font, gray tones, off-white backgrounds, black borders. No bright colors.
+- No light/dark mode. Cinema dark theme: DM Sans font, near-black backgrounds (#111111), warm white text (#ede9e0), dark borders (#333333), gold accent (#c9a84c). wire-* token names unchanged in component files.
 - `.env.local` must include `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in` and `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-in` or Clerk redirects to its hosted Account Portal.
 - Seed `available_slots` using `make_timestamptz(year, month, day, 19, 0, 0, 'America/Los_Angeles')` — `AT TIME ZONE` on generate_series dates runs backwards (converts UTC→LA instead of LA→UTC).
 - Hidden `/sign-out` page exists for tester use — not linked in the UI.
