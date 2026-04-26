@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DM_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -33,7 +34,7 @@ export default function RootLayout({
               Theater With a View
             </Link>
           </header>
-          {children}
+          <ThemeProvider>{children}</ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
