@@ -33,6 +33,13 @@ export default function RootLayout({
             >
               Theater With a View
             </Link>
+            <Link
+              href="/preferences"
+              aria-label="Preferences"
+              className="text-wire-text-muted hover:text-wire-text text-2xl leading-none p-2 -mr-2"
+            >
+              ⚙
+            </Link>
           </header>
           <ThemeProvider>{children}</ThemeProvider>
         </body>
