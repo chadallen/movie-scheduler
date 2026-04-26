@@ -1,7 +1,7 @@
 # Movie Scheduler — Plan
 
 **Task tracking:** Task tracking is via bd. Run `bd ready` for next tasks.
-**Active epic:** movie-scheduler-999 — Admin user management (all closed) · movie-scheduler-3uj — Theme switcher (4 tasks) · movie-scheduler-ohk — claim_slot RPC past-slot fix · movie-scheduler-plc — Favicon
+**Active epic:** none — `movie-scheduler-ohk` (claim_slot RPC fix, needs manual Supabase SQL run) is the only remaining open task
 
 ---
 
@@ -19,9 +19,9 @@
 
 ### 2026-04-26
 
-Built and deployed the full admin stack (`999.2`, `999.3`, `t7a`, `b6e`): server actions for user management and movie deletion, `/admin` page with user table + inline edit + create form + scheduled movies delete section. Fixed numerous production bugs: server actions now return error objects instead of throwing (fixes Next.js error boundary issue), sign-in redirects to `redirect_url` param so admin lands on `/admin` when navigating there first, phone inputs auto-prepend `+1`, home page forced dynamic so new movies appear without redeployying, scheduled movie filter now uses Pacific date (today or later) instead of UTC timestamp. Created tasks for remaining work: `ohk` (claim_slot RPC past-slot fix — needs SQL run in Supabase), `plc` (favicon), `3uj` epic (theme switcher: Cinema Dark / Classic, 4 tasks).
+Shipped the complete theme switcher epic (`3uj`): CSS wireframe tokens, ThemeContext/ThemeProvider, `/preferences` page with Cinema Dark / Classic radio picker, and a gear icon in the header. Also shipped SVG gear icon replacing the Unicode ⚙ (`j5a`), removed preference subtitles (`2e3`), and designed a movie camera favicon in gold on dark (`plc`). Tagged `pre-theme-picker` rollback point. All changes deployed to production via `production` branch.
 
-**Next session:** Run SQL for `movie-scheduler-ohk` in Supabase SQL editor (already documented in `lib/actions/suggestMovie.ts`), then `/build-tasks movie-scheduler-3uj --auto` for the theme switcher epic, or tackle `plc` (favicon).
+**Next session:** Run SQL for `movie-scheduler-ohk` in Supabase SQL editor — SQL is in the comment block at the top of `lib/actions/suggestMovie.ts`. That is the only remaining open task.
 
 ---
 
@@ -30,7 +30,7 @@ Built and deployed the full admin stack (`999.2`, `999.3`, `t7a`, `b6e`): server
 - `movie-scheduler-ohk` (claim_slot RPC): requires manual SQL run in Supabase SQL editor — SQL is in `lib/actions/suggestMovie.ts` comment. Until done, users can suggest movies into past slots.
 - `WEEKLY_MOVIE_LIMIT` is currently 200 in `lib/config.ts` — lower before production deploy.
 - `ADMIN_PHONE` must be set in Vercel environment variables (currently only in `.env.local`).
-- April 24 Dune row (`efc3bd82`) still in `scheduled_movies` with a past slot — harmless but can be deleted from Supabase directly.
+- April 24 Dune row (`efc3bd82`) still in `scheduled_movies` with a past slot — harmless, can be deleted from Supabase directly.
 
 ---
 
