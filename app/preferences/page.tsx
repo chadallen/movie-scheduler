@@ -30,10 +30,7 @@ export default function PreferencesPage() {
                 onChange={() => setTheme('cinema')}
                 className="w-4 h-4 accent-wire-accent cursor-pointer"
               />
-              <div className="flex flex-col">
-                <span className="text-wire-text font-bold text-base">Cinema Dark</span>
-                <span className="text-wire-text-muted text-sm">Dark background, gold accents</span>
-              </div>
+              <span className="text-wire-text font-bold text-base">Cinema Dark</span>
             </label>
 
             {/* Classic option */}
@@ -46,10 +43,7 @@ export default function PreferencesPage() {
                 onChange={() => setTheme('wireframe')}
                 className="w-4 h-4 accent-wire-accent cursor-pointer"
               />
-              <div className="flex flex-col">
-                <span className="text-wire-text font-bold text-base">Classic</span>
-                <span className="text-wire-text-muted text-sm">Light background, Comic Sans</span>
-              </div>
+              <span className="text-wire-text font-bold text-base">Classic</span>
             </label>
           </div>
         </section>
