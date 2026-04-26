@@ -11,18 +11,74 @@ export default function Icon() {
         style={{
           width: 32,
           height: 32,
-          background: "#f5f5f0",
-          border: "2px solid #1a1a1a",
+          background: "#111111",
+          borderRadius: 4,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontFamily: "serif",
-          fontWeight: 700,
-          fontSize: 20,
-          color: "#1a1a1a",
+          position: "relative",
         }}
       >
-        M
+        {/* Camera body */}
+        <div
+          style={{
+            position: "absolute",
+            left: 4,
+            top: 10,
+            width: 18,
+            height: 12,
+            background: "#c9a84c",
+            borderRadius: 2,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "flex-start",
+            justifyContent: "space-around",
+            paddingTop: 0,
+          }}
+        >
+          {/* Film strip notches — dark squares along the top */}
+          <div
+            style={{
+              width: 3,
+              height: 3,
+              background: "#111111",
+              borderRadius: 0,
+              marginTop: 1,
+            }}
+          />
+          <div
+            style={{
+              width: 3,
+              height: 3,
+              background: "#111111",
+              borderRadius: 0,
+              marginTop: 1,
+            }}
+          />
+          <div
+            style={{
+              width: 3,
+              height: 3,
+              background: "#111111",
+              borderRadius: 0,
+              marginTop: 1,
+            }}
+          />
+        </div>
+
+        {/* Lens — circle on the right side of the body */}
+        <div
+          style={{
+            position: "absolute",
+            right: 4,
+            top: 12,
+            width: 8,
+            height: 8,
+            background: "#c9a84c",
+            borderRadius: 4,
+            border: "2px solid #111111",
+          }}
+        />
       </div>
     ),
     { ...size }
