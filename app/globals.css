@@ -24,6 +24,22 @@ body {
   color: var(--color-wire-text);
 }
 
+/* Classic wireframe theme — light background, Comic Sans, dark borders */
+.theme-wireframe {
+  --color-wire-bg: #f5f5f0;
+  --color-wire-surface: #ebebeb;
+  --color-wire-surface-2: #e0e0e0;
+  --color-wire-border: #1a1a1a;
+  --color-wire-text: #1a1a1a;
+  --color-wire-text-muted: #555555;
+  --color-wire-white: #ffffff;
+  --color-wire-accent: #1a1a1a;
+  --color-background: #f5f5f0;
+  --color-foreground: #1a1a1a;
+  --font-sans: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Chalkboard", cursive;
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Chalkboard", cursive;
+}
+
 /* Reset browser-default blue links — all anchors use wireframe text color */
 a {
   color: inherit;
