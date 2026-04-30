@@ -43,7 +43,14 @@ pnpm lint       # lint
 Task tracking is via bd. Run `bd ready` for next tasks.
 Commits include the task ID: `git commit -m "<message> (<task-id>)"`
 
-Skills: /start-session, /end-session, /create-tasks, /build-tasks, /adr
+Skills: /start-session, /end-session, /create-tasks, /build-tasks, /adr, /web-ui-test
+
+## UI Testing
+
+Use `/web-ui-test` to test the UI autonomously. Dev server: `pnpm dev` on port 3000.
+
+**Primary:** Chrome integration (`--chrome` flag or `/chrome`) — shares your existing browser session, so Clerk auth is transparent if you're already signed in.
+**Fallback:** Playwright MCP (headless, configured in `~/.claude/mcp.json`) — hits Clerk OTP wall; can only test pre-auth pages without a session cookie.
 
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->

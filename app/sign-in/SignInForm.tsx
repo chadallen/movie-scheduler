@@ -58,7 +58,7 @@ export default function SignInForm() {
           setError(testerResult.error === "invalid credentials" ? "Invalid OTP" : "Sign-in failed");
           return;
         }
-        const { error: ticketError } = await signIn.ticket({ ticket: testerResult.token });
+        const { error: ticketError } = await signIn.create({ strategy: "ticket", ticket: testerResult.token });
         if (ticketError) throw new Error(ticketError.longMessage ?? ticketError.message);
       } else {
         const { error: verifyError } = await signIn.phoneCode.verifyCode({ code: otp });
