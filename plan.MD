@@ -17,11 +17,15 @@
 
 ## Current Status
 
+### 2026-04-30
+
+Full end-to-end UAT against production passed. Fixed tester OTP bypass: `signIn.ticket()` doesn't set `createdSessionId` in Clerk v7 — replaced with `signIn.create({ strategy: 'ticket', ticket })`. Also: updated `TESTER_PHONE` to `+19175758974` in Vercel (same as `ADMIN_PHONE`), added `TEST_MODE` toggle, added `scripts/deploy.sh` for API-triggered Vercel rebuilds. UAT confirmed: sign-in bypass, movie suggest, /preferences, admin user create/delete, admin movie delete — all working in production.
+
+**Next session:** Run SQL for `movie-scheduler-ohk` in Supabase SQL editor — SQL is in the comment block at the top of `lib/actions/suggestMovie.ts`. That is the only remaining open task.
+
 ### 2026-04-26
 
 Shipped the complete theme switcher epic (`3uj`): CSS wireframe tokens, ThemeContext/ThemeProvider, `/preferences` page with Cinema Dark / Classic radio picker, and a gear icon in the header. Also shipped SVG gear icon replacing the Unicode ⚙ (`j5a`), removed preference subtitles (`2e3`), and designed a movie camera favicon in gold on dark (`plc`). Tagged `pre-theme-picker` rollback point. All changes deployed to production via `production` branch.
-
-**Next session:** Run SQL for `movie-scheduler-ohk` in Supabase SQL editor — SQL is in the comment block at the top of `lib/actions/suggestMovie.ts`. That is the only remaining open task.
 
 ---
 
