@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { listUsers } from "@/lib/actions/adminUsers";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { toPTDateString, todayPT } from "@/lib/time";
+import { isAdminPhone } from "@/lib/config";
 import UserManagement from "./UserManagement";
 import ScheduledMovies, { type ScheduledMovie } from "./ScheduledMovies";
 
@@ -18,10 +19,9 @@ export default async function AdminPage() {
     redirect("/sign-in");
   }
 
-  const adminPhone = process.env.ADMIN_PHONE;
   const userPhone = user.phoneNumbers?.[0]?.phoneNumber;
 
-  if (!adminPhone || !userPhone || userPhone !== adminPhone) {
+  if (!userPhone || !isAdminPhone(userPhone)) {
     redirect("/not-authorized");
   }
 

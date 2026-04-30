@@ -29,8 +29,15 @@ Shipped the complete theme switcher epic (`3uj`): CSS wireframe tokens, ThemeCon
 
 - `movie-scheduler-ohk` (claim_slot RPC): requires manual SQL run in Supabase SQL editor — SQL is in `lib/actions/suggestMovie.ts` comment. Until done, users can suggest movies into past slots.
 - `WEEKLY_MOVIE_LIMIT` is currently 200 in `lib/config.ts` — lower before production deploy.
-- `ADMIN_PHONE` must be set in Vercel environment variables (currently only in `.env.local`).
 - April 24 Dune row (`efc3bd82`) still in `scheduled_movies` with a past slot — harmless, can be deleted from Supabase directly.
+
+---
+
+## Testing
+
+UAT test plan: [`docs/uat.md`](docs/uat.md)
+Production URL: `https://movies.fork.pizza`
+Tester flow: enter `TESTER_PHONE` + `TESTER_OTP` (bypass active when `TEST_MODE=true` in Vercel)
 
 ---
 

@@ -2,7 +2,7 @@
 import "server-only";
 import { timingSafeEqual } from "crypto";
 import { clerkClient } from "@clerk/nextjs/server";
-import { TESTER_PHONE, TESTER_OTP } from "../config";
+import { TESTER_PHONE, TESTER_OTP, TEST_MODE } from "../config";
 
 function safeEqual(a: string, b: string): boolean {
   const ab = Buffer.from(a);
@@ -12,7 +12,7 @@ function safeEqual(a: string, b: string): boolean {
 }
 
 export async function checkIsTesterPhone(phone: string): Promise<boolean> {
-  return TESTER_PHONE !== "" && safeEqual(phone, TESTER_PHONE);
+  return TEST_MODE && TESTER_PHONE !== "" && safeEqual(phone, TESTER_PHONE);
 }
 
 export async function createTesterSession(

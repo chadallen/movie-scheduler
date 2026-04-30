@@ -2,14 +2,14 @@
 import "server-only";
 import { currentUser } from "@clerk/nextjs/server";
 import { createServerSupabaseClient } from "../supabase-server";
+import { isAdminPhone } from "../config";
 
 // ---------------------------------------------------------------------------
 // Admin guard
 // ---------------------------------------------------------------------------
 
 async function isAdmin(): Promise<void> {
-  const adminPhone = process.env.ADMIN_PHONE;
-  if (!adminPhone) {
+  if (!process.env.ADMIN_PHONE) {
     throw new Error("ADMIN_PHONE is not configured");
   }
 
@@ -19,7 +19,7 @@ async function isAdmin(): Promise<void> {
   }
 
   const phone = user.phoneNumbers?.[0]?.phoneNumber;
-  if (!phone || phone !== adminPhone) {
+  if (!phone || !isAdminPhone(phone)) {
     throw new Error("Not authorized");
   }
 }
