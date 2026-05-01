@@ -21,7 +21,7 @@
 
 Full end-to-end UAT against production passed. Fixed tester OTP bypass: `signIn.ticket()` doesn't set `createdSessionId` in Clerk v7 — replaced with `signIn.create({ strategy: 'ticket', ticket })`. Also: updated `TESTER_PHONE` to `+19175758974` in Vercel (same as `ADMIN_PHONE`), added `TEST_MODE` toggle, added `scripts/deploy.sh` for API-triggered Vercel rebuilds. UAT confirmed: sign-in bypass, movie suggest, /preferences, admin user create/delete, admin movie delete — all working in production.
 
-**Next session:** Run SQL for `movie-scheduler-ohk` in Supabase SQL editor — SQL is in the comment block at the top of `lib/actions/suggestMovie.ts`. That is the only remaining open task.
+**Next session:** Run SQL for `movie-scheduler-ohk` in Supabase SQL editor — SQL is in the comment block at the top of `lib/actions/suggestMovie.ts`. Then optionally clean up the April 24 Dune test row (`movie-scheduler-sau`).
 
 ### 2026-04-26
 
@@ -33,7 +33,7 @@ Shipped the complete theme switcher epic (`3uj`): CSS wireframe tokens, ThemeCon
 
 - `movie-scheduler-ohk` (claim_slot RPC): requires manual SQL run in Supabase SQL editor — SQL is in `lib/actions/suggestMovie.ts` comment. Until done, users can suggest movies into past slots.
 - `WEEKLY_MOVIE_LIMIT` is currently 200 in `lib/config.ts` — lower before production deploy.
-- April 24 Dune row (`efc3bd82`) still in `scheduled_movies` with a past slot — harmless, can be deleted from Supabase directly.
+- April 24 Dune row (`efc3bd82`) still in `scheduled_movies` with a past slot — tracked as `movie-scheduler-sau`, delete via Supabase SQL editor.
 
 ---
 
