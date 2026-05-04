@@ -9,6 +9,9 @@ export const TESTER_OTP = process.env.TESTER_OTP ?? "";
 // Set TEST_MODE=false (or unset) to restore normal SMS OTP for that number.
 export const TEST_MODE = process.env.TEST_MODE === "true";
 
+// Invite code required at sign-up to restrict access to invited users only.
+export const INVITE_CODE = process.env.INVITE_CODE ?? "";
+
 // Returns true if the given phone number has admin privileges.
 // The primary admin is ADMIN_PHONE; TESTER_PHONE also gets admin access
 // so the test account can exercise admin flows.
