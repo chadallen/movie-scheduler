@@ -1,7 +1,7 @@
 # Movie Scheduler — Plan
 
 **Task tracking:** Task tracking is via bd. Run `bd ready` for next tasks.
-**Active epic:** none — `movie-scheduler-ohk` (claim_slot RPC fix, needs manual Supabase SQL run) is the only remaining open task
+**Active epic:** `movie-scheduler-2b0` — Invite code sign-up flow (3 tasks)
 
 ---
 
